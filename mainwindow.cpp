@@ -12,13 +12,13 @@
 #include <QStringListModel>
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow) {
-  ui->setupUi(this);
+    : QMainWindow(parent), m_ui(new Ui::MainWindow) {
+  m_ui->setupUi(this);
 
   reopenLastFile();
 }
 
-MainWindow::~MainWindow() { delete ui; }
+MainWindow::~MainWindow() { delete m_ui; }
 
 void MainWindow::on_actionOpen_file_triggered() {
   QString filePath = QFileDialog::getOpenFileName(
@@ -52,8 +52,8 @@ void MainWindow::updateLabel(QString fileName) {
   QStandardItemModel *model = new QStandardItemModel();
   QList<QStandardItem *> list;
 
-  ui->listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-  ui->listView->setViewMode(QListView::ListMode);
+  m_ui->listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+  m_ui->listView->setViewMode(QListView::ListMode);
 
   for (int i = 0; i < fileLines.size(); i++) {
     list << new QStandardItem(fileLines.at(i));
@@ -68,7 +68,7 @@ void MainWindow::updateLabel(QString fileName) {
   //  vMap.insert(Qt::ForegroundRole, QVariant(QBrush(Qt::white)));
   //  model->setItemData(vIndex, vMap);
 
-  ui->listView->setModel(model);
+  m_ui->listView->setModel(model);
 }
 
 void MainWindow::reopenLastFile() {
@@ -82,12 +82,12 @@ void MainWindow::reopenLastFile() {
 }
 
 void MainWindow::startFileWatcher(QString filePath) {
-  QFileSystemWatcher *fileWatcher = new QFileSystemWatcher(this);
+  m_fileWatcher = new QFileSystemWatcher(this);
 
-  fileWatcher->addPath(filePath);
+  m_fileWatcher->addPath(filePath);
 
-  connect(fileWatcher, SIGNAL(fileChanged(QString)), this,
-          SLOT(updateLabel(QString)));
+  connect(m_fileWatcher, &QFileSystemWatcher::fileChanged, this,
+          &MainWindow::updateLabel);
 }
 
 void MainWindow::on_actionAbout_triggered() {

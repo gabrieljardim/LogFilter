@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QFileSystemWatcher>
 #include <QMainWindow>
 
 namespace Ui {
@@ -26,7 +27,8 @@ private slots:
   void on_actionAbout_triggered();
 
 private:
-  Ui::MainWindow *ui;
+  Ui::MainWindow *m_ui;
+  QFileSystemWatcher *m_fileWatcher;
 
   void reopenLastFile();
 
