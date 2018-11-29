@@ -61,12 +61,12 @@ void MainWindow::updateLabel(QString fileName) {
 
   model->appendColumn(list);
 
-  QModelIndex vIndex = model->index(0, 0);
-  QMap<int, QVariant> vMap = model->itemData(vIndex);
-
-  vMap.insert(Qt::BackgroundRole, QVariant(QBrush(Qt::red)));
-  vMap.insert(Qt::ForegroundRole, QVariant(QBrush(Qt::white)));
-  model->setItemData(vIndex, vMap);
+  // POC
+  //  QModelIndex vIndex = model->index(0, 0);
+  //  QMap<int, QVariant> vMap = model->itemData(vIndex);
+  //  vMap.insert(Qt::BackgroundRole, QVariant(QBrush(Qt::red)));
+  //  vMap.insert(Qt::ForegroundRole, QVariant(QBrush(Qt::white)));
+  //  model->setItemData(vIndex, vMap);
 
   ui->listView->setModel(model);
 }
