@@ -24,11 +24,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
-        main.cpp \
-        mainwindow.cpp
+    main.cpp \
+    mainwindow.cpp \
+    filehandler.cpp \
+    highlightdialog.cpp
 
 HEADERS += \
-        mainwindow.h
+    mainwindow.h \
+    filehandler.h \
+    highlightdialog.h
 
 FORMS += \
-        mainwindow.ui
+    mainwindow.ui \
+    highlightdialog.ui
