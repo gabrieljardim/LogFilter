@@ -6,6 +6,8 @@
 #include <QList>
 #include <QStandardItemModel>
 
+#include "highlightdata.h"
+
 namespace Ui {
 class HighlightDialog;
 }
@@ -16,6 +18,11 @@ class HighlightDialog : public QDialog {
 public:
   explicit HighlightDialog(QWidget *parent = nullptr);
   ~HighlightDialog();
+
+  QList<HighlightData> highlightList() const;
+
+signals:
+  void highlightsUpdated();
 
 private slots:
   void on_addButton_clicked();
@@ -42,9 +49,13 @@ private:
   Ui::HighlightDialog *m_ui;
   QStandardItemModel *m_model;
   QList<QStandardItem *> m_list;
+  QList<HighlightData> m_highlightList;
 
   QColor m_foregroundColor;
   QColor m_backgroundColor;
+
+  void loadHighlightConfig(QList<HighlightData> highlightList);
+  void addItemToModel(QString text, QColor foreground, QColor background);
 };
 
 #endif // HIGHLIGHTDIALOG_H
