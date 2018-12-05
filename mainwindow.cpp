@@ -30,8 +30,8 @@ void MainWindow::on_actionOpen_file_triggered() {
       this, tr("Open File"), "C://", "All files (*.*);;Text (*.txt)");
 
   if (filePath.isEmpty()) {
-      qDebug() << "No file selected.";
-      return;
+    qDebug() << "No file selected.";
+    return;
   }
 
   startFileWatcher(filePath);
@@ -51,31 +51,31 @@ void MainWindow::on_actionHighlights_triggered() {
 }
 
 void MainWindow::onFileChanged(QString filePath) {
-    qDebug() << "File changed, updating...";
+  qDebug() << "File changed, updating...";
 
-    QStringList fileLines(FileHandler::getFileContent(filePath));
-    unsigned int fileLinesSize = static_cast<unsigned>(fileLines.size());
+  QStringList fileLines(FileHandler::getFileContent(filePath));
+  unsigned int fileLinesSize = static_cast<unsigned>(fileLines.size());
 
-    // file wiped or some like this
-    if (fileLinesSize <= m_lastLineLoaded) {
-        qDebug() << "File wiped? Cleaning view.";
-        m_model->clear();
-    }
+  // file wiped or some like this
+  if (fileLinesSize <= m_lastLineLoaded) {
+    qDebug() << "File wiped? Cleaning view.";
+    m_model->clear();
+  }
 
-    for (unsigned int i = m_lastLineLoaded; i < fileLinesSize; i++) {
-      m_model->appendRow(new QStandardItem(fileLines.at(static_cast<signed>(i))));
-    }
+  for (unsigned int i = m_lastLineLoaded; i < fileLinesSize; i++) {
+    m_model->appendRow(new QStandardItem(fileLines.at(static_cast<signed>(i))));
+  }
 
-    m_lastLineLoaded = fileLinesSize;
+  m_lastLineLoaded = fileLinesSize;
 
-    qDebug() << "Last line loaded: " << m_lastLineLoaded;
+  qDebug() << "Last line loaded: " << m_lastLineLoaded;
 
-    // POC
-    //  QModelIndex vIndex = model->index(0, 0);
-    //  QMap<int, QVariant> vMap = model->itemData(vIndex);
-    //  vMap.insert(Qt::BackgroundRole, QVariant(QBrush(Qt::red)));
-    //  vMap.insert(Qt::ForegroundRole, QVariant(QBrush(Qt::white)));
-    //  model->setItemData(vIndex, vMap);
+  // POC
+  //  QModelIndex vIndex = model->index(0, 0);
+  //  QMap<int, QVariant> vMap = model->itemData(vIndex);
+  //  vMap.insert(Qt::BackgroundRole, QVariant(QBrush(Qt::red)));
+  //  vMap.insert(Qt::ForegroundRole, QVariant(QBrush(Qt::white)));
+  //  model->setItemData(vIndex, vMap);
 }
 
 void MainWindow::reopenLastFile() {

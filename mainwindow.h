@@ -23,7 +23,7 @@ private slots:
 
   void on_actionHighlights_triggered();
 
-  void updateLabel(QString);
+  void onFileChanged(QString);
 
   void on_actionAbout_triggered();
 
