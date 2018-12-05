@@ -12,8 +12,12 @@
 #include <QStringListModel>
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), m_ui(new Ui::MainWindow) {
+    : QMainWindow(parent), m_ui(new Ui::MainWindow), m_model(new QStandardItemModel()) {
   m_ui->setupUi(this);
+
+  m_ui->listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+  m_ui->listView->setViewMode(QListView::ListMode);
+  m_ui->listView->setModel(m_model);
 
   reopenLastFile();
 }
@@ -28,7 +32,7 @@ void MainWindow::on_actionOpen_file_triggered() {
 
   FileHandler::saveOpenedFilePath(filePath);
 
-  updateLabel(filePath);
+  loadEntireFile(filePath);
 }
 
 void MainWindow::on_actionExit_triggered() { QApplication::quit(); }
@@ -40,42 +44,39 @@ void MainWindow::on_actionHighlights_triggered() {
   highlight.exec();
 }
 
+void MainWindow::loadEntireFile(QString filePath) {
+
+    qDebug() << "Loading entire file: " << filePath;
+
+    QStringList fileLines(FileHandler::getFileContent(filePath));
+
+    for (int i = 0; i < fileLines.size(); i++) {
+      m_list << new QStandardItem(fileLines.at(i));
+    }
+
+    m_model->appendColumn(m_list);
+
+    // POC
+    //  QModelIndex vIndex = model->index(0, 0);
+    //  QMap<int, QVariant> vMap = model->itemData(vIndex);
+    //  vMap.insert(Qt::BackgroundRole, QVariant(QBrush(Qt::red)));
+    //  vMap.insert(Qt::ForegroundRole, QVariant(QBrush(Qt::white)));
+    //  model->setItemData(vIndex, vMap);
+}
+
 void MainWindow::updateLabel(QString fileName) {
 
   // TODO: Make a method to load the file a first time and then only load in
   // that slot what has changed..
 
   qDebug() << "File changed, updating...";
-
-  QStringList fileLines(FileHandler::getFileContent(fileName));
-
-  QStandardItemModel *model = new QStandardItemModel();
-  QList<QStandardItem *> list;
-
-  m_ui->listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-  m_ui->listView->setViewMode(QListView::ListMode);
-
-  for (int i = 0; i < fileLines.size(); i++) {
-    list << new QStandardItem(fileLines.at(i));
-  }
-
-  model->appendColumn(list);
-
-  // POC
-  //  QModelIndex vIndex = model->index(0, 0);
-  //  QMap<int, QVariant> vMap = model->itemData(vIndex);
-  //  vMap.insert(Qt::BackgroundRole, QVariant(QBrush(Qt::red)));
-  //  vMap.insert(Qt::ForegroundRole, QVariant(QBrush(Qt::white)));
-  //  model->setItemData(vIndex, vMap);
-
-  m_ui->listView->setModel(model);
 }
 
 void MainWindow::reopenLastFile() {
   QString lastLogPath = FileHandler::getLastLogFile();
 
   if (lastLogPath.size() > 0) {
-    updateLabel(lastLogPath);
+    loadEntireFile(lastLogPath);
 
     startFileWatcher(lastLogPath);
   }
