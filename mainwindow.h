@@ -4,7 +4,6 @@
 #include <QFileSystemWatcher>
 #include <QMainWindow>
 #include <QStandardItemModel>
-#include <QStandardItem>
 
 namespace Ui {
 class MainWindow;
@@ -14,7 +13,7 @@ class MainWindow : public QMainWindow {
   Q_OBJECT
 
 public:
-  explicit MainWindow(QWidget *parent = 0);
+  explicit MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
 
 private slots:
@@ -32,9 +31,8 @@ private:
   Ui::MainWindow *m_ui;
   QFileSystemWatcher *m_fileWatcher;
   QStandardItemModel *m_model;
-  QList<QStandardItem *> m_list;
+  unsigned int m_lastLineLoaded;
 
-  void loadEntireFile(QString filePath);
   void reopenLastFile();
 
   void startFileWatcher(QString filePath);

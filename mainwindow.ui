@@ -35,19 +35,12 @@
          <x>0</x>
          <y>0</y>
          <width>780</width>
-         <height>519</height>
+         <height>521</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <widget class="QLabel" name="label">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QListView" name="listView"/>
+         <widget class="QListView" name="logListView"/>
         </item>
        </layout>
       </widget>
@@ -61,7 +54,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>22</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFIle">
