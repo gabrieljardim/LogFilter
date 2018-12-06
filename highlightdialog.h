@@ -19,10 +19,10 @@ public:
   explicit HighlightDialog(QWidget *parent = nullptr);
   ~HighlightDialog();
 
-  QList<HighlightData> highlightList() const;
+  QList<HighlightData> highlightList();
 
 signals:
-  void highlightsUpdated();
+  void highlightsUpdated(QList<HighlightData>);
 
 private slots:
   void on_addButton_clicked();

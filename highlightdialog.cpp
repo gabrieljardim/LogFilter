@@ -74,7 +74,7 @@ void HighlightDialog::on_okButton_clicked() {
   // salvar pra um arquivo
   FileHandler::saveHighlightList(m_highlightList);
 
-  emit highlightsUpdated();
+  emit highlightsUpdated(m_highlightList);
   this->close();
 }
 
@@ -125,7 +125,12 @@ void HighlightDialog::on_highlightListView_clicked(const QModelIndex &index) {
   m_ui->stringLineEdit->setPalette(palette);
 }
 
-QList<HighlightData> HighlightDialog::highlightList() const {
+QList<HighlightData> HighlightDialog::highlightList() {
+
+  if (m_highlightList.isEmpty()) {
+    m_highlightList = FileHandler::getHighlightList();
+  }
+
   return m_highlightList;
 }
 
