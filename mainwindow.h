@@ -32,6 +32,8 @@ private slots:
 
   void onScrollChanged(int);
 
+  void onRangeChanged(int, int);
+
 private:
   Ui::MainWindow *m_ui;
   QFileSystemWatcher *m_fileWatcher;
