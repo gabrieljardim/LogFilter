@@ -44,6 +44,7 @@ QStringList FileHandler::getFileContent(QString filePath) {
   QFile file(filePath);
 
   if (!file.open(QIODevice::ReadOnly)) {
+    qDebug() << "File open returns false.";
     return QStringList();
   }
 

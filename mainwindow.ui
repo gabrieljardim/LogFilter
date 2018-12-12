@@ -14,8 +14,8 @@
    <string>LogFilter</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QHBoxLayout" name="horizontalLayout">
-    <item>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
      <widget class="QScrollArea" name="scrollArea">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -35,11 +35,11 @@
          <x>0</x>
          <y>0</y>
          <width>780</width>
-         <height>521</height>
+         <height>519</height>
         </rect>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout">
-        <item>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
          <widget class="QListView" name="logListView"/>
         </item>
        </layout>
@@ -54,7 +54,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>20</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFIle">
@@ -70,6 +70,7 @@
      <string>Options</string>
     </property>
     <addaction name="actionHighlights"/>
+    <addaction name="actionAuto_scroll"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
@@ -117,6 +118,17 @@
   <action name="actionAbout">
    <property name="text">
     <string>About...</string>
+   </property>
+  </action>
+  <action name="actionAuto_scroll">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Auto scroll</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+W</string>
    </property>
   </action>
  </widget>

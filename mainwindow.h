@@ -3,6 +3,7 @@
 
 #include <QFileSystemWatcher>
 #include <QMainWindow>
+#include <QScrollBar>
 #include <QStandardItemModel>
 
 namespace Ui {
@@ -27,11 +28,15 @@ private slots:
 
   void on_actionAbout_triggered();
 
+  void on_actionAuto_scroll_changed();
+
+  void onScrollChanged(int);
+
 private:
   Ui::MainWindow *m_ui;
   QFileSystemWatcher *m_fileWatcher;
   QStandardItemModel *m_model;
-  unsigned int m_lastLineLoaded;
+  int m_lastLineLoaded;
 
   void reopenLastFile();
 
