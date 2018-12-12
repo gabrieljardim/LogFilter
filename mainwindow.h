@@ -37,6 +37,7 @@ private:
   QFileSystemWatcher *m_fileWatcher;
   QStandardItemModel *m_model;
   int m_lastLineLoaded;
+  int m_fileLinesCount;
 
   void reopenLastFile();
 
