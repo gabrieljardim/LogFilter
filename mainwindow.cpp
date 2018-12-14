@@ -12,6 +12,8 @@
 #include <QStringList>
 #include <QStringListModel>
 
+const int g_renderOffset = 60;
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), m_ui(new Ui::MainWindow),
       m_fileWatcher(new QFileSystemWatcher(this)),
@@ -24,8 +26,6 @@ MainWindow::MainWindow(QWidget *parent)
   QScrollBar *bar = m_ui->logListView->verticalScrollBar();
 
   connect(bar, SIGNAL(valueChanged(int)), this, SLOT(onScrollChanged(int)));
-  connect(bar, SIGNAL(rangeChanged(int, int)), this,
-          SLOT(onRangeChanged(int, int)));
 
   reopenLastFile();
 }
@@ -118,10 +118,15 @@ void MainWindow::on_actionAuto_scroll_changed() {
 
 void MainWindow::onScrollChanged(int value) {
 
-  qDebug() << "I need to render " << (m_fileLinesCount - value);
-}
+  int renderLimit = m_fileLinesCount;
 
-void MainWindow::onRangeChanged(int a, int b) {
-  qDebug() << "Start " << a;
-  qDebug() << "End " << b;
+  if ((value + g_renderOffset) < m_fileLinesCount) {
+    renderLimit = (value + g_renderOffset);
+  }
+
+  qDebug() << "First line showing (" << value
+           << "): " << m_model->item(value)->text();
+  qDebug() << " Last line showing (" << (renderLimit - 1)
+           << "): " << m_model->item(renderLimit - 1)->text();
+  qDebug() << "===========================";
 }
