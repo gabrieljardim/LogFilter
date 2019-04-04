@@ -12,7 +12,7 @@
 #include <QStringList>
 #include <QStringListModel>
 
-const int g_renderOffset = 60;
+const int g_renderOffset = 100;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), m_ui(new Ui::MainWindow),
@@ -63,11 +63,12 @@ void MainWindow::onFileChanged(QString filePath) {
   QStringList fileLines(FileHandler::getFileContent(filePath));
   m_fileLinesCount = fileLines.size();
 
-  // file wiped or some like this
-  //  if (m_fileLinesCount <= m_lastLineLoaded) {
-  //    qDebug() << "File wiped? Cleaning view.";
-  //    m_model->clear();
-  //  }
+  if (m_fileLinesCount <= 0 || m_fileLinesCount < m_lastLineLoaded) {
+    m_model->clear();
+  }
+
+  qDebug() << "File has" << m_fileLinesCount << "lines";
+  qDebug() << "Last line read" << m_lastLineLoaded;
 
   for (int i = m_lastLineLoaded; i < m_fileLinesCount; i++) {
     m_model->appendRow(new QStandardItem(fileLines.at(i)));
@@ -117,16 +118,5 @@ void MainWindow::on_actionAuto_scroll_changed() {
 }
 
 void MainWindow::onScrollChanged(int value) {
-
-  int renderLimit = m_fileLinesCount;
-
-  if ((value + g_renderOffset) < m_fileLinesCount) {
-    renderLimit = (value + g_renderOffset);
-  }
-
-  qDebug() << "First line showing (" << value
-           << "): " << m_model->item(value)->text();
-  qDebug() << " Last line showing (" << (renderLimit - 1)
-           << "): " << m_model->item(renderLimit - 1)->text();
-  qDebug() << "===========================";
+  qDebug() << "Render" << value << "to" << (g_renderOffset + value);
 }
