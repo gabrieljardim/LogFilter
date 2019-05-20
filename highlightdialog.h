@@ -22,7 +22,7 @@ public:
   QList<HighlightData> highlightList();
 
 signals:
-  void highlightsUpdated(QList<HighlightData>);
+  void highlightsChanged(QList<HighlightData>);
 
 private slots:
   void on_addButton_clicked();

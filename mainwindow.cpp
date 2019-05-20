@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "filehandler.h"
-#include "highlightdialog.h"
 #include "ui_mainwindow.h"
 
 #include <QDebug>
@@ -16,6 +15,12 @@ MainWindow::MainWindow(QWidget *parent)
   m_ui->setupUi(this);
 
   reopenLastFile();
+
+  // setup highlight dialog
+  m_highlight.setModal(true);
+
+  connect(&m_highlight, &HighlightDialog::highlightsChanged, this,
+          &MainWindow::onHighlightsChanged);
 }
 
 MainWindow::~MainWindow() { delete m_ui; }
@@ -28,19 +33,14 @@ void MainWindow::on_actionOpen_file_triggered() {
 
   FileHandler::saveOpenedFilePath(filePath);
 
-  updateLabel(filePath);
+  onFileChanged(filePath);
 }
 
 void MainWindow::on_actionExit_triggered() { QApplication::quit(); }
 
-void MainWindow::on_actionHighlights_triggered() {
+void MainWindow::on_actionHighlights_triggered() { m_highlight.exec(); }
 
-  HighlightDialog highlight;
-  highlight.setModal(true);
-  highlight.exec();
-}
-
-void MainWindow::updateLabel(QString fileName) {
+void MainWindow::onFileChanged(QString fileName) {
 
   // TODO: Make a method to load the file a first time and then only load in
   // that slot what has changed..
@@ -61,21 +61,48 @@ void MainWindow::updateLabel(QString fileName) {
 
   model->appendColumn(list);
 
-  // POC
-  //  QModelIndex vIndex = model->index(0, 0);
-  //  QMap<int, QVariant> vMap = model->itemData(vIndex);
-  //  vMap.insert(Qt::BackgroundRole, QVariant(QBrush(Qt::red)));
-  //  vMap.insert(Qt::ForegroundRole, QVariant(QBrush(Qt::white)));
-  //  model->setItemData(vIndex, vMap);
-
   m_ui->listView->setModel(model);
+}
+
+void MainWindow::onHighlightsChanged(QList<HighlightData> highlightList) {
+
+  QModelIndex modelIndex;
+  QMap<int, QVariant> map;
+
+  QListIterator<HighlightData> i(highlightList);
+
+  while (i.hasNext()) {
+    HighlightData highlight = i.next();
+
+    for (int row = 0; row < m_ui->listView->model()->rowCount(); row++) {
+
+      // gets listview item
+      modelIndex = m_ui->listView->model()->index(row, 0);
+
+      if (modelIndex.data().toString().contains(highlight.text())) {
+
+        qDebug() << "Applying color properties to" << highlight.text()
+                 << "row.";
+
+        // doing this to be possible to use color properties
+        map = m_ui->listView->model()->itemData(modelIndex);
+
+        // setting colors
+        map.insert(Qt::BackgroundRole, QVariant(QBrush(highlight.backColor())));
+        map.insert(Qt::ForegroundRole, QVariant(QBrush(highlight.foreColor())));
+
+        // re-adding itens to listview
+        m_ui->listView->model()->setItemData(modelIndex, map);
+      }
+    }
+  }
 }
 
 void MainWindow::reopenLastFile() {
   QString lastLogPath = FileHandler::getLastLogFile();
 
   if (lastLogPath.size() > 0) {
-    updateLabel(lastLogPath);
+    onFileChanged(lastLogPath);
 
     startFileWatcher(lastLogPath);
   }
@@ -87,7 +114,7 @@ void MainWindow::startFileWatcher(QString filePath) {
   m_fileWatcher->addPath(filePath);
 
   connect(m_fileWatcher, &QFileSystemWatcher::fileChanged, this,
-          &MainWindow::updateLabel);
+          &MainWindow::onFileChanged);
 }
 
 void MainWindow::on_actionAbout_triggered() {

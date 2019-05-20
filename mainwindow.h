@@ -4,6 +4,8 @@
 #include <QFileSystemWatcher>
 #include <QMainWindow>
 
+#include "highlightdialog.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -22,13 +24,16 @@ private slots:
 
   void on_actionHighlights_triggered();
 
-  void updateLabel(QString);
-
   void on_actionAbout_triggered();
+
+  void onFileChanged(QString fileName);
+
+  void onHighlightsChanged(QList<HighlightData> highlightList);
 
 private:
   Ui::MainWindow *m_ui;
   QFileSystemWatcher *m_fileWatcher;
+  HighlightDialog m_highlight;
 
   void reopenLastFile();
 

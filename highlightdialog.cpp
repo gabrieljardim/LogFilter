@@ -71,10 +71,10 @@ void HighlightDialog::on_okButton_clicked() {
     m_highlightList.append(highData);
   }
 
-  // salvar pra um arquivo
+  // saving highlight data to file
   FileHandler::saveHighlightList(m_highlightList);
 
-  emit highlightsUpdated(m_highlightList);
+  emit highlightsChanged(m_highlightList);
   this->close();
 }
 
