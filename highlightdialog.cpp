@@ -14,7 +14,9 @@ HighlightDialog::HighlightDialog(QWidget *parent)
       m_backgroundColor(Qt ::white) {
   m_ui->setupUi(this);
 
+  // disable row editing
   m_ui->highlightListView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
   m_ui->highlightListView->setViewMode(QListView::ListMode);
   m_ui->highlightListView->setModel(m_model);
 
