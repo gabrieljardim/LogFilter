@@ -93,6 +93,10 @@ void HighlightDialog::on_foregroundColorButton_clicked() {
                      m_ui->stringLineEdit->palette().base().color());
 
     m_ui->stringLineEdit->setPalette(palette);
+
+    m_ui->foregroundColorButton->setStyleSheet(
+        QString("QToolButton{ background: %1; }")
+            .arg(m_foregroundColor.name()));
   }
 }
 
@@ -107,6 +111,10 @@ void HighlightDialog::on_backgroundColorButton_clicked() {
                      m_ui->stringLineEdit->palette().text().color());
 
     m_ui->stringLineEdit->setPalette(palette);
+
+    m_ui->backgroundColorButton->setStyleSheet(
+        QString("QToolButton{ background: %1; }")
+            .arg(m_backgroundColor.name()));
   }
 }
 
@@ -123,6 +131,12 @@ void HighlightDialog::on_highlightListView_clicked(const QModelIndex &index) {
   QPalette palette;
   palette.setColor(QPalette::Base, m_backgroundColor);
   palette.setColor(QPalette::Text, m_foregroundColor);
+
+  m_ui->foregroundColorButton->setStyleSheet(
+      QString("QToolButton{ background: %1; }").arg(m_foregroundColor.name()));
+
+  m_ui->backgroundColorButton->setStyleSheet(
+      QString("QToolButton{ background: %1; }").arg(m_backgroundColor.name()));
 
   m_ui->stringLineEdit->setPalette(palette);
 }
