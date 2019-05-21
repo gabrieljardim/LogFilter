@@ -77,8 +77,11 @@ void MainWindow::applyHighlights() {
   QMap<int, QVariant> map;
   QListIterator<HighlightData> i(m_highlightDataList);
 
-  while (i.hasNext()) {
-    HighlightData highlight = i.next();
+  // sets the iterator to the end for backward iteration
+  i.toBack();
+
+  while (i.hasPrevious()) {
+    HighlightData highlight = i.previous();
 
     for (int row = 0; row < m_ui->listView->model()->rowCount(); row++) {
 
