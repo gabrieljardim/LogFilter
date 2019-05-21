@@ -11,16 +11,20 @@
 #include <QStringListModel>
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), m_ui(new Ui::MainWindow) {
+    : QMainWindow(parent), m_ui(new Ui::MainWindow),
+      m_highlightDataList(FileHandler::getHighlightList()) {
   m_ui->setupUi(this);
 
   reopenLastFile();
 
   // setup highlight dialog
-  m_highlight.setModal(true);
+  m_highlightDialog.setModal(true);
 
-  connect(&m_highlight, &HighlightDialog::highlightsChanged, this,
+  connect(&m_highlightDialog, &HighlightDialog::highlightsChanged, this,
           &MainWindow::onHighlightsChanged);
+
+  // applying highlights on boot
+  applyHighlights();
 }
 
 MainWindow::~MainWindow() { delete m_ui; }
@@ -38,7 +42,7 @@ void MainWindow::on_actionOpen_file_triggered() {
 
 void MainWindow::on_actionExit_triggered() { QApplication::quit(); }
 
-void MainWindow::on_actionHighlights_triggered() { m_highlight.exec(); }
+void MainWindow::on_actionHighlights_triggered() { m_highlightDialog.exec(); }
 
 void MainWindow::onFileChanged(QString fileName) {
 
@@ -62,14 +66,16 @@ void MainWindow::onFileChanged(QString fileName) {
   model->appendColumn(list);
 
   m_ui->listView->setModel(model);
+
+  // apply highlights after view update
+  applyHighlights();
 }
 
-void MainWindow::onHighlightsChanged(QList<HighlightData> highlightList) {
+void MainWindow::applyHighlights() {
 
   QModelIndex modelIndex;
   QMap<int, QVariant> map;
-
-  QListIterator<HighlightData> i(highlightList);
+  QListIterator<HighlightData> i(m_highlightDataList);
 
   while (i.hasNext()) {
     HighlightData highlight = i.next();
@@ -96,6 +102,12 @@ void MainWindow::onHighlightsChanged(QList<HighlightData> highlightList) {
       }
     }
   }
+}
+
+void MainWindow::onHighlightsChanged(QList<HighlightData> highlightDataList) {
+
+  m_highlightDataList = highlightDataList;
+  applyHighlights();
 }
 
 void MainWindow::reopenLastFile() {

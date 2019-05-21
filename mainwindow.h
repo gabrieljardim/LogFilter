@@ -17,6 +17,8 @@ public:
   explicit MainWindow(QWidget *parent = 0);
   ~MainWindow();
 
+  void applyHighlights();
+
 private slots:
   void on_actionOpen_file_triggered();
 
@@ -28,12 +30,13 @@ private slots:
 
   void onFileChanged(QString fileName);
 
-  void onHighlightsChanged(QList<HighlightData> highlightList);
+  void onHighlightsChanged(QList<HighlightData> highlightDataList);
 
 private:
   Ui::MainWindow *m_ui;
   QFileSystemWatcher *m_fileWatcher;
-  HighlightDialog m_highlight;
+  HighlightDialog m_highlightDialog;
+  QList<HighlightData> m_highlightDataList;
 
   void reopenLastFile();
 
