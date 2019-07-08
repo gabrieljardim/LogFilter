@@ -156,9 +156,9 @@ void MainWindow::on_actionAbout_triggered() {
 }
 
 void MainWindow::on_actionAuto_scroll_changed() {
-//  if (m_ui->actionAuto_scroll->isChecked()) {
-//    m_ui->listView->scrollToBottom();
-//  }
+  if (m_ui->actionAuto_scroll->isChecked()) {
+    m_ui->logListView->scrollToBottom();
+  }
 }
 
 void MainWindow::onScrollChanged(int value) {
