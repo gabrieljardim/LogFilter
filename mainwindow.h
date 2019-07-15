@@ -48,8 +48,8 @@ private:
   int m_fileLinesCount;
 
   void reopenLastFile();
-
   void startFileWatcher(QString filePath);
+  void clearHighlights();
 };
 
 #endif // MAINWINDOW_H

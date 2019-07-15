@@ -90,7 +90,6 @@ void MainWindow::onFileChanged(QString fileName) {
 }
 
 void MainWindow::applyHighlights() {
-
   QModelIndex modelIndex;
   QMap<int, QVariant> map;
   QListIterator<HighlightData> i(m_highlightDataList);
@@ -101,24 +100,21 @@ void MainWindow::applyHighlights() {
   while (i.hasPrevious()) {
     HighlightData highlight = i.previous();
 
-    for (int row = 0; row < m_ui->logListView->model()->rowCount(); row++) {
+    for (int row = 0; row < m_ui->logListView->model()->rowCount(); row++) {     
 
       // gets listview item
       modelIndex = m_ui->logListView->model()->index(row, 0);
 
       if (modelIndex.data().toString().contains(highlight.text())) {
 
-        qDebug() << "Applying color properties to" << highlight.text()
-                 << "row.";
-
         // doing this to be possible to use color properties
         map = m_ui->logListView->model()->itemData(modelIndex);
 
-        // setting colors
+        // setting custom colors
         map.insert(Qt::BackgroundRole, QVariant(QBrush(highlight.backColor())));
         map.insert(Qt::ForegroundRole, QVariant(QBrush(highlight.foreColor())));
 
-        // re-adding itens to listview
+        // re-adding item to listview
         m_ui->logListView->model()->setItemData(modelIndex, map);
       }
     }
@@ -126,6 +122,9 @@ void MainWindow::applyHighlights() {
 }
 
 void MainWindow::onHighlightsChanged(QList<HighlightData> highlightDataList) {
+  if (highlightDataList.size() < m_highlightDataList.size()) {
+    clearHighlights();
+  }
 
   m_highlightDataList = highlightDataList;
   applyHighlights();
@@ -148,6 +147,24 @@ void MainWindow::startFileWatcher(QString filePath) {
           &MainWindow::onFileChanged);
 }
 
+void MainWindow::clearHighlights() {
+  QModelIndex modelIndex;
+  QMap<int, QVariant> map;
+
+  for (int row = 0; row < m_ui->logListView->model()->rowCount(); row++) {
+    modelIndex = m_ui->logListView->model()->index(row, 0);
+
+    map = m_ui->logListView->model()->itemData(modelIndex);
+
+    // setting custom colors
+    map.insert(Qt::BackgroundRole, QVariant(QBrush(Qt::white)));
+    map.insert(Qt::ForegroundRole, QVariant(QBrush(Qt::black)));
+
+    // re-adding item to listview
+    m_ui->logListView->model()->setItemData(modelIndex, map);
+  }
+}
+
 void MainWindow::on_actionAbout_triggered() {
   QMessageBox::information(
       this, "Help",
@@ -162,5 +179,6 @@ void MainWindow::on_actionAuto_scroll_changed() {
 }
 
 void MainWindow::onScrollChanged(int value) {
-  qDebug() << "Render" << value << "to" << (g_renderOffset + value);
+    Q_UNUSED(value)
+  //qDebug() << "Render" << value << "to" << (g_renderOffset + value);
 }

@@ -56,6 +56,7 @@ private:
 
   void loadHighlightConfig(QList<HighlightData> highlightList);
   void addItemToModel(QString text, QColor foreground, QColor background);
+  void clearInputs();
 };
 
 #endif // HIGHLIGHTDIALOG_H

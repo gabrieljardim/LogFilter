@@ -38,14 +38,13 @@ void HighlightDialog::on_addButton_clicked() {
   }
 
   addItemToModel(text, m_foregroundColor, m_backgroundColor);
-
-  m_ui->stringLineEdit->setPalette(QPalette());
-  m_ui->stringLineEdit->clear();
+  clearInputs();
 }
 
 void HighlightDialog::on_deleteButton_clicked() {
 
   m_model->removeRows(m_ui->highlightListView->currentIndex().row(), 1);
+  clearInputs();
 }
 
 void HighlightDialog::on_moveUpButton_clicked() {
@@ -169,4 +168,17 @@ void HighlightDialog::addItemToModel(QString text, QColor foreground,
   vMap.insert(Qt::BackgroundRole, QVariant(background));
   vMap.insert(Qt::ForegroundRole, QVariant(foreground));
   m_model->setItemData(vIndex, vMap);
+}
+
+void HighlightDialog::clearInputs() {
+    m_ui->stringLineEdit->setPalette(QPalette());
+    m_ui->stringLineEdit->clear();
+
+    m_ui->foregroundColorButton->setStyleSheet(
+        QString("QToolButton{ background: %1; }")
+            .arg(Qt::white));
+
+    m_ui->backgroundColorButton->setStyleSheet(
+        QString("QToolButton{ background: %1; }")
+            .arg(Qt::white));
 }
