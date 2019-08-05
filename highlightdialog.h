@@ -54,7 +54,7 @@ private:
   QColor m_foregroundColor;
   QColor m_backgroundColor;
 
-  void loadHighlightConfig(QList<HighlightData> highlightList);
+  void loadHighlightConfig(QList<HighlightData> &highlightList);
   void addItemToModel(QString text, QColor foreground, QColor background);
   void clearInputs();
 };

@@ -13,7 +13,7 @@ QString getLastLogFile();
 
 QStringList getFileContent(QString filePath);
 
-void saveHighlightList(QList<HighlightData> highList);
+void saveHighlightList(QList<HighlightData> &highlightList);
 
 QList<HighlightData> getHighlightList();
 

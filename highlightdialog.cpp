@@ -9,9 +9,11 @@
 #include "filehandler.h"
 
 HighlightDialog::HighlightDialog(QWidget *parent)
-    : QDialog(parent), m_ui(new Ui::HighlightDialog),
-      m_model(new QStandardItemModel()), m_foregroundColor(Qt::black),
-      m_backgroundColor(Qt ::white) {
+    : QDialog(parent), m_ui(new Ui::HighlightDialog)
+    , m_model(new QStandardItemModel())
+    , m_highlightList(FileHandler::getHighlightList())
+    , m_foregroundColor(Qt::black)
+    , m_backgroundColor(Qt ::white) {
   m_ui->setupUi(this);
 
   // disable row editing
@@ -20,7 +22,7 @@ HighlightDialog::HighlightDialog(QWidget *parent)
   m_ui->highlightListView->setViewMode(QListView::ListMode);
   m_ui->highlightListView->setModel(m_model);
 
-  loadHighlightConfig(FileHandler::getHighlightList());
+  loadHighlightConfig(m_highlightList);
 
   // TODO: Implement this buttons
   m_ui->moveDownButton->setDisabled(true);
@@ -149,12 +151,11 @@ QList<HighlightData> HighlightDialog::highlightList() {
   return m_highlightList;
 }
 
-void HighlightDialog::loadHighlightConfig(QList<HighlightData> highlightList) {
+void HighlightDialog::loadHighlightConfig(QList<HighlightData>& highlightList) {
 
-  for (int i = 0; i < highlightList.size(); i++) {
-    HighlightData highlight = highlightList.at(i);
-    addItemToModel(highlight.text(), highlight.foreColor(),
-                   highlight.backColor());
+  for(auto highlight : highlightList) {
+      addItemToModel(highlight.text(), highlight.foreColor(),
+                     highlight.backColor());
   }
 }
 

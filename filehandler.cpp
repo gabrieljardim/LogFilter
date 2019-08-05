@@ -63,21 +63,20 @@ QStringList FileHandler::getFileContent(QString filePath) {
   return list;
 }
 
-void FileHandler::saveHighlightList(QList<HighlightData> highList) {
+void FileHandler::saveHighlightList(QList<HighlightData>& highlightList) {
   QFile file(highlightFileName);
   file.open(QIODevice::WriteOnly | QIODevice::Text);
   file.resize(0);
 
   QTextStream stream(&file);
 
-  for (int i = 0; i < highList.size(); i++) {
-    HighlightData highlight = highList.at(i);
-    QString line = highlight.text() + "," + highlight.foreColor().name() + "," +
-                   highlight.backColor().name() + "\n";
+  for (auto highlight : highlightList) {
+      QString line = highlight.text() + "," + highlight.foreColor().name() + "," +
+                     highlight.backColor().name() + "\n";
 
-    qDebug() << line;
+      qDebug() << line;
 
-    stream << line;
+      stream << line;
   }
 
   file.close();
