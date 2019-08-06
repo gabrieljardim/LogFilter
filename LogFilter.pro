@@ -27,12 +27,14 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     filehandler.cpp \
-    highlightdialog.cpp
+    highlightdialog.cpp \
+    highlightdata.cpp
 
 HEADERS += \
     mainwindow.h \
     filehandler.h \
-    highlightdialog.h
+    highlightdialog.h \
+    highlightdata.h
 
 FORMS += \
     mainwindow.ui \
